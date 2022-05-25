@@ -12,7 +12,6 @@ namespace LinkedList
 
         public int Count => count;
 
-
         public void Add(int data)
         {
             Node node = new Node(data);
@@ -87,12 +86,58 @@ namespace LinkedList
 
         public IEnumerator<int> GetEnumerator()
         {
-            return new LinkedListIterator(this);
+            return new LinkedListIEnumerator(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new LinkedListIEnumerator(this);
+        }
+
+        class Node
+        {
+            public Node(int data)
+            {
+                Data = data;
+            }
+            public int Data { get; set; }
+            public Node Next { get; set; }
+        }
+
+        class LinkedListIEnumerator : IEnumerator<int>
+        {
+            private LinkedList linkedList;
+
+            public LinkedListIEnumerator(LinkedList linkedList)
+            {
+                this.linkedList = linkedList;
+            }
+
+            public int Current => current;
+
+            object IEnumerator.Current => current;
+
+            private int pointer;
+            private int current;
+
+            public bool MoveNext()
+            {
+                if (++pointer < linkedList.Count)
+                {
+                    current = linkedList.GetByIndex(pointer);
+                    return true;
+                }
+                else return false;
+            }
+
+            public void Reset()
+            {
+                pointer = -1;
+            }
+
+            public void Dispose()
+            {
+            }
         }
     }
 }
